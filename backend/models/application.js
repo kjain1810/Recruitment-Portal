@@ -10,6 +10,10 @@ const ApplicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    recruiter: {
+        type: Schema.Types.ObjectId,
+        required: true
+    },
     sop: {
         type: String,
         required: true,

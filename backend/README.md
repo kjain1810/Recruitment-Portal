@@ -31,7 +31,6 @@
       "salary": int,
       "rating_sum": int,
       "rating_cnt": int,
-      "people_applied": [_id of Application],
       "recruited_people": int,
       "active": bool
    }
@@ -53,7 +52,6 @@
       "rating_cnt": int,
       "resume": PDF  file (figure out how to),
       "photo": JPG file (figure out how to),
-      "jobs_applied_to": [_id of Job],
       "ratings": [_id of Rating],
       "accepted": bool
    }
@@ -65,6 +63,7 @@
    {
       "job": _id,
       "applicant": _id,
+      "recruiter": _id,
       "sop": str,
       "status": str (either applied, shortlisted, accepted or rejected),
       "still_eligible": bool

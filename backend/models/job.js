@@ -117,10 +117,6 @@ const JobSchema = new Schema({
       message: "Invalid number of rating",
     },
   },
-  people_applied: {
-    type: [Schema.Types.ObjectId],
-    default: [],
-  },
   recruited_people: {
     type: Number,
     default: 0,

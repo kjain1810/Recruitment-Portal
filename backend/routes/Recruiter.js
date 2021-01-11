@@ -1,18 +1,18 @@
 var express = require("express");
 var router = express.Router();
 
-const Applicant = require("../models/applicant");
+const Recruiter = require("../models/recruiter");
 
-router.post("/addapplicant", (req, res) => {
+router.post("/addrecruiter", (req, res) => {
   bodyelements = req.body;
   console.log(bodyelements);
-  const newApplicant = new Applicant(bodyelements);
-  newApplicant
+  const newRecruiter = new Recruiter(bodyelements);
+  newRecruiter
     .save()
-    .then((newApplicant) => {
+    .then((newRecruiter) => {
       res.status(200).json({
         status: true,
-        applicant: newApplicant,
+        recruiter: newRecruiter,
       });
     })
     .catch((err) => {
