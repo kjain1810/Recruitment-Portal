@@ -5,7 +5,6 @@ const Recruiter = require("../models/recruiter");
 
 router.post("/addrecruiter", (req, res) => {
   bodyelements = req.body;
-  console.log(bodyelements);
   const newRecruiter = new Recruiter(bodyelements);
   newRecruiter
     .save()

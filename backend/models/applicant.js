@@ -82,7 +82,7 @@ const ApplicantSchema = new Schema({
   },
   accepted: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 module.exports = Applicant = mongoose.model("Applicants", ApplicantSchema);

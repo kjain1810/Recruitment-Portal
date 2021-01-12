@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
 
 class Login extends Component {
   constructor(props) {
@@ -9,12 +11,13 @@ class Login extends Component {
     this.onChangeType = this.onChangeType.bind(this);
     this.changeposition = this.changeposition.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    
+
     this.state = {
       email: "",
       password: "",
       acctype: "Recruiter",
       position: 1,
+      id: "",
     };
   }
 
@@ -30,18 +33,37 @@ class Login extends Component {
     this.setState({ acctype: event.target.value });
   }
 
-  changeposition(event) {
-      this.setState({position: 1});
+  changeposition() {
+    this.setState({ position: 1 });
   }
 
   onSubmit(event) {
-      const user = {
+    event.preventDefault();
+
+    axios
+      .get("http://localhost:8080/users/checklogin", {
+        headers: {
           email: this.state.email,
           password: this.state.password,
-          type: this.state.type
-      }
-      this.setState({position: 2});
-      console.log(user);
+          type: this.state.acctype,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === false) {
+          console.log(response.data.err);
+        } else {
+          if (response.data.found === false) {
+            this.setState({ position: 2 });
+          } else {
+            this.setState({ id: response.data.user.collectionid });
+            if (this.state.acctype === "Recruiter") {
+              this.setState({ position: 3 });
+            } else {
+              this.setState({ position: 4 });
+            }
+          }
+        }
+      });
   }
 
   render() {
@@ -52,6 +74,7 @@ class Login extends Component {
           <p>
             Email:
             <input
+              required
               type="text"
               value={this.state.email}
               onChange={this.onChangeEmail}
@@ -60,6 +83,7 @@ class Login extends Component {
           <p>
             Password:
             <input
+              required
               type="text"
               value={this.state.password}
               onChange={this.onChangePassword}
@@ -83,13 +107,33 @@ class Login extends Component {
           <button>Submit</button>
         </form>
       );
-    }
-    else {
-        return(
+    } else if (this.state.position === 2) {
+      return (
         <div>
           <p>Incorrect email or password!</p>
           <button onClick={this.changeposition}>Okay, try again</button>
-        </div>);
+        </div>
+      );
+    } else if (this.state.position === 3) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: "/recruiterpage",
+            state: { email: this.state.email, id: this.state.id },
+          }}
+        />
+      );
+    } else if (this.state.position === 4) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: "/applicantpage",
+            state: { email: this.state.email, id: this.state.id },
+          }}
+        />
+      );
     }
   }
 }

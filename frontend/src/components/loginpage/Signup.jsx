@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
 
 class SignUp extends Component {
   constructor(props) {
@@ -16,12 +18,12 @@ class SignUp extends Component {
       password: "",
       confirmpasword: "",
       acctype: "Recruiter",
-      currentposition: 1,
+      position: 1,
     };
   }
 
   changeposition() {
-      this.setState({ currentposition: 1 });
+    this.setState({ position: 1 });
   }
 
   onChangeemail(event) {
@@ -45,21 +47,39 @@ class SignUp extends Component {
 
     if (this.state.password !== this.state.confirmpasword) {
       console.log("Passwords must match!");
-        this.setState({ currentposition: 2 });
+      this.setState({ position: 2 });
       return;
     }
 
-    const newUser = {
-      email: this.state.email,
-      password: this.state.password,
-      type: this.state.acctype,
-    };
-
-    console.log(newUser);
+    axios
+      .get("http://localhost:8080/users/checkuser", {
+        headers: {
+          email: this.state.email,
+          type: this.state.acctype,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === false) {
+          console.log(response.err);
+        } else {
+          if (response.data.exists === false) {
+            if (this.state.acctype === "Recruiter") {
+              this.setState({ position: 4 });
+            } else {
+              this.setState({ position: 5 });
+            }
+          } else {
+            this.setState({ position: 3 });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
-    if (this.state.currentposition === 1) {
+    if (this.state.position === 1) {
       return (
         <form onSubmit={this.onSubmit}>
           <h1> Sign Up </h1>
@@ -108,19 +128,39 @@ class SignUp extends Component {
           <button>Submit</button>
         </form>
       );
-    } else if (this.state.currentposition === 2) {
+    } else if (this.state.position === 2) {
       return (
         <div>
           <p>Passwords did not match!</p>
           <button onClick={this.changeposition}>Okay, try again</button>
         </div>
       );
-    } else if (this.state.currentposition === 3) {
+    } else if (this.state.position === 3) {
       return (
         <div>
           <p>Email already registered!</p>
           <button onClick={this.changeposition}>Okay, try again</button>
         </div>
+      );
+    } else if (this.state.position === 4) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: "/recruiterregister",
+            state: { email: this.state.email, password: this.state.password },
+          }}
+        />
+      );
+    } else if (this.state.position === 5) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: "/applicantregister",
+            state: { email: this.state.email, password: this.state.password },
+          }}
+        />
       );
     }
   }
