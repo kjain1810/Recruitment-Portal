@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import ApplicantHeader from "./Applicant/ApplicantHeader";
-import "./Applicant/styles.css";
+import React, { Component } from 'react'
+import './Applicant/styles.css'
+import ApplicantHeader from './Applicant/ApplicantHeader'
 
-class ApplicantPage extends Component {
+class ApplicantProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,5 +18,5 @@ class ApplicantPage extends Component {
     );
   }
 }
-
-export default ApplicantPage;
+ 
+export default ApplicantProfile;

@@ -6,8 +6,7 @@ const User = require("../models/user");
 
 router.get("/checkuser", (req, res) => {
   const email = req.headers.email;
-  const type = req.headers.type;
-  User.count({ email: email, collectionname: type }, function (err, count) {
+  User.count({ email: email }, function (err, count) {
     if (count > 0) {
       res.status(200).json({
         status: true,
@@ -52,8 +51,7 @@ router.post("/newuser", (req, res) => {
 router.get("/checklogin", (req, res) => {
   const email = req.headers.email;
   const password = req.headers.password;
-  const type = req.headers.type;
-  const checker = { email: email, password: password, collectionname: type };
+  const checker = { email: email, password: password };
   User.findOne(checker)
     .then((user) => {
       if (user) {

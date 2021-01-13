@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import LoginHeader from './loginpage/Login_header';
 import Login from './loginpage/Login';
 import SignUp from './loginpage/Signup';
+import "./loginpage/styles.css";
 
 class LoginPage extends Component {
     state = {  }
@@ -9,8 +10,10 @@ class LoginPage extends Component {
         return (
           <div className="LoginPage">
             <LoginHeader></LoginHeader>
-            <Login></Login>
-            <SignUp></SignUp>
+            <div className="rowC">
+              <Login className="columnLeft"></Login>
+              <SignUp className="columnRight"></SignUp>
+            </div>
           </div>
         );
     }

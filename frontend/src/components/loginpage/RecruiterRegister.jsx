@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import {Navbar, NavbarBrand, Form, Button, FormGroup, Label, Input} from 'reactstrap';
 
 class RecruiterRegister extends Component {
   constructor(props) {
@@ -80,35 +81,44 @@ class RecruiterRegister extends Component {
   render() {
     if (this.state.position === 1) {
       return (
-        <form onSubmit={this.onSubmit}>
-          <p>
-            First Name:
-            <input
-              required
-              type="text"
-              value={this.state.first_name}
-              onChange={this.onChangeFN}
-            />
-          </p>
-          <p>
-            Middle Name:
-            <input
-              type="text"
-              value={this.state.middle_name}
-              onChange={this.onChangeMN}
-            />
-          </p>
-          <p>
-            Last Name:
-            <input
-              required
-              type="text"
-              value={this.state.last_name}
-              onChange={this.onChangeLN}
-            />
-          </p>
-          <button>Submit</button>
-        </form>
+        <div className="LoginPage">
+          <Navbar color="dark" dark expand="md">
+            <NavbarBrand>LinkedIn Lite</NavbarBrand>
+          </Navbar>
+          <br />
+          <Form onSubmit={this.onSubmit}>
+            <FormGroup>
+              <Label for="firstname">First Name</Label>
+              <Input
+                required
+                name="firstname"
+                placeholder="First Name"
+                value={this.state.first_name}
+                onChange={this.onChangeFN}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="middlename">Middle Name</Label>
+              <Input
+                name="middlename"
+                placeholder="Middle Name"
+                value={this.state.middle_name}
+                onChange={this.onChangeMN}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Last Name</Label>
+              <Input
+                required
+                name="lastname"
+                placeholder="Last Name"
+                value={this.state.last_name}
+                onChange={this.onChangeLN}
+              />
+            </FormGroup>
+            <Button color="primary">Submit</Button>
+          </Form>
+        </div>
       );
     } else {
       return (

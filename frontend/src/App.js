@@ -5,6 +5,8 @@ import ApplicantPage from './components/ApplicantPage';
 import RecruiterPage from './components/RecruiterPage';
 import RecruiterRegister from './components/loginpage/RecruiterRegister';
 import ApplicantRegister from './components/loginpage/ApplicantRegister';
+import ApplicantProfile from './components/ApplicantProfile';
+import RecruiterProfile from './components/RecruiterProfile';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Route path="/recruiterpage" component={RecruiterPage} />
       <Route path="/recruiterregister" component={RecruiterRegister} />
       <Route path="/applicantregister" component={ApplicantRegister} />
+      <Route path="/applicantprofile" component={ApplicantProfile} />
+      <Route path="/recruiterprofile" component={RecruiterProfile} />
     </Router>
   );
 }

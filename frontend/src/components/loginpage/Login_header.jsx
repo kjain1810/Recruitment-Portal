@@ -1,8 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Navbar, NavbarBrand } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 class LoginHeader extends Component {
     render() {
-        return <h2><center>Job application portal</center></h2>
+        return (
+          <div>
+            <Navbar color="dark" dark expand="md">
+                <NavbarBrand>LinkedIn Lite</NavbarBrand>
+            </Navbar>
+          </div>
+        );
     }
 }
 

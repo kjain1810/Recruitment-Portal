@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import RecruiterHeader from "./Recruiter/RecruiterHeader";
-import "./Recruiter/styles.css";
+import React, { Component } from 'react'
+import RecruiterHeader from './Recruiter/RecruiterHeader';
+import './Recruiter/styles.css';
 
-class RecruiterPage extends Component {
+class RecruiterProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,5 +19,5 @@ class RecruiterPage extends Component {
     );
   }
 }
-
-export default RecruiterPage;
+ 
+export default RecruiterProfile;

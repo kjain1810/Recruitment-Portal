@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import { Form, FormGroup, Input, Label, Button, Badge } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 class SignUp extends Component {
   constructor(props) {
@@ -55,7 +57,6 @@ class SignUp extends Component {
       .get("http://localhost:8080/users/checkuser", {
         headers: {
           email: this.state.email,
-          type: this.state.acctype,
         },
       })
       .then((response) => {
@@ -81,39 +82,49 @@ class SignUp extends Component {
   render() {
     if (this.state.position === 1) {
       return (
-        <form onSubmit={this.onSubmit}>
-          <h1> Sign Up </h1>
-          <p>
-            Email:
-            <input
+        <Form onSubmit={this.onSubmit}>
+          <h3>
+            <Badge color="secondary">Sign Up</Badge>
+          </h3>
+          <FormGroup row>
+            <Label for="email">Email</Label>
+            <Input
               required
-              type="text"
+              type="email"
+              name="email"
+              placeholder="Enter your email"
               value={this.state.email}
               onChange={this.onChangeemail}
             />
-          </p>
-          <p>
-            Password:
-            <input
+          </FormGroup>
+          <FormGroup row>
+            <Label for="password">Password</Label>
+            <Input
               required
-              type="text"
+              type="password"
+              name="password"
+              placeholder="Enter Password"
               value={this.state.password}
               onChange={this.onChangePassword}
             />
-          </p>
-          <p>
-            Confirm password:
-            <input
+          </FormGroup>
+          <FormGroup row>
+            <Label for="conpassword">Confirm password</Label>
+            <Input
               required
-              type="text"
+              type="password"
+              name="conpassword"
+              placeholder="Confirm Password"
               value={this.state.confirmpasword}
               onChange={this.onChangeConfirmPassword}
             />
-          </p>
-          <p>
-            Type:
-            <select
+          </FormGroup>
+          <FormGroup row>
+            <Label for="type">Type</Label>
+            <Input
               required
+              type="select"
+              name="type"
               value={this.state.acctype}
               onChange={this.onChangeType}
             >
@@ -123,23 +134,23 @@ class SignUp extends Component {
               <option key="Applicant" value="Applicant">
                 Applicant
               </option>
-            </select>
-          </p>
-          <button>Submit</button>
-        </form>
+            </Input>
+          </FormGroup>
+          <Button color="primary">Submit</Button>
+        </Form>
       );
     } else if (this.state.position === 2) {
       return (
         <div>
           <p>Passwords did not match!</p>
-          <button onClick={this.changeposition}>Okay, try again</button>
+          <Button onClick={this.changeposition}>Okay, try again</Button>
         </div>
       );
     } else if (this.state.position === 3) {
       return (
         <div>
           <p>Email already registered!</p>
-          <button onClick={this.changeposition}>Okay, try again</button>
+          <Button onClick={this.changeposition}>Okay, try again</Button>
         </div>
       );
     } else if (this.state.position === 4) {

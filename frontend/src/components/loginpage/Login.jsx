@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import { Form, FormGroup, Input, Label, Button, Badge } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 class Login extends Component {
   constructor(props) {
@@ -8,14 +10,13 @@ class Login extends Component {
 
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeType = this.onChangeType.bind(this);
     this.changeposition = this.changeposition.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       email: "",
       password: "",
-      acctype: "Recruiter",
+      acctype: "",
       position: 1,
       id: "",
     };
@@ -27,10 +28,6 @@ class Login extends Component {
 
   onChangePassword(event) {
     this.setState({ password: event.target.value });
-  }
-
-  onChangeType(event) {
-    this.setState({ acctype: event.target.value });
   }
 
   changeposition() {
@@ -45,7 +42,6 @@ class Login extends Component {
         headers: {
           email: this.state.email,
           password: this.state.password,
-          type: this.state.acctype,
         },
       })
       .then((response) => {
@@ -56,6 +52,7 @@ class Login extends Component {
             this.setState({ position: 2 });
           } else {
             this.setState({ id: response.data.user.collectionid });
+            this.setState( {acctype: response.data.user.collectionname});
             if (this.state.acctype === "Recruiter") {
               this.setState({ position: 3 });
             } else {
@@ -69,49 +66,40 @@ class Login extends Component {
   render() {
     if (this.state.position === 1) {
       return (
-        <form onSubmit={this.onSubmit}>
-          <h1> Login </h1>
-          <p>
-            Email:
-            <input
+        <Form onSubmit={this.onSubmit}>
+          <h3>
+            <Badge color="secondary"> Login </Badge>
+          </h3>
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input
               required
-              type="text"
+              type="email"
+              name="email"
+              placeholder="Enter your email"
               value={this.state.email}
               onChange={this.onChangeEmail}
             />
-          </p>
-          <p>
-            Password:
-            <input
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input
               required
-              type="text"
+              type="password"
+              name="password"
+              placeholder="Enter your password"
               value={this.state.password}
               onChange={this.onChangePassword}
             />
-          </p>
-          <p>
-            Type:
-            <select
-              required
-              value={this.state.acctype}
-              onChange={this.onChangeType}
-            >
-              <option key="Recruiter" value="Recruiter">
-                Recruiter
-              </option>
-              <option key="Applicant" value="Applicant">
-                Applicant
-              </option>
-            </select>
-          </p>
-          <button>Submit</button>
-        </form>
+          </FormGroup>
+          <Button color="primary">Submit</Button>
+        </Form>
       );
     } else if (this.state.position === 2) {
       return (
         <div>
           <p>Incorrect email or password!</p>
-          <button onClick={this.changeposition}>Okay, try again</button>
+          <Button onClick={this.changeposition}>Okay, try again</Button>
         </div>
       );
     } else if (this.state.position === 3) {

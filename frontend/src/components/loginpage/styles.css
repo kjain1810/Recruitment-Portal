@@ -1,0 +1,20 @@
+.rowC {
+    display: flex;
+    flex-direction: row;
+    overflow : hidden;
+    width: 100%;
+}
+
+.columnLeft {
+display : inline - block;}
+
+
+.columnRight {
+    display: inline-block;
+}
+
+.LoginPage {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
