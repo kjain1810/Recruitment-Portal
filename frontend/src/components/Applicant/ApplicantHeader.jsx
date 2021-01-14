@@ -5,7 +5,6 @@ import { NavLink as RRNavLink } from "react-router-dom";
 class ApplicantHeader extends Component {
     constructor(props) {
         super(props);
-        console.log("navbar", props.email, props.id);
         this.state = {
             email: this.props.email,
             id: this.props.id

@@ -84,5 +84,9 @@ const ApplicantSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  skill_set: {
+    type: [String],
+    default: [],
+  }
 });
 module.exports = Applicant = mongoose.model("Applicants", ApplicantSchema);

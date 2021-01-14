@@ -13,8 +13,9 @@ class RecruiterPage extends Component {
   }
   render() {
     return (
-      <div className="page">
+      <div>
         <RecruiterHeader email={this.state.email} id={this.state.id} />
+        <div className="page"></div>
       </div>
     );
   }

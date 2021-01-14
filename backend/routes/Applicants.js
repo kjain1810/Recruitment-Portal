@@ -23,4 +23,55 @@ router.post("/addapplicant", (req, res) => {
     });
 });
 
+router.get("/getapplicant", (req, res) => {
+  const id = req.headers.id;
+  Applicant.findById(id)
+    .then((applicant) => {
+      if (applicant === undefined) {
+        res.status(200).json({
+          status: true,
+          found: false,
+        });
+      } else {
+        res.status(200).json({
+          status: true,
+          found: true,
+          applicant: applicant,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(200).json({
+        status: false,
+        err: err,
+      });
+    });
+});
+
+router.put("/editapplicant", (req, res) => {
+  var id = req.body.id;
+  Applicant.findByIdAndUpdate(id, {"$set": req.body}, { new: true }, function (
+    err,
+    newApplicant
+  ) {
+    if (err) {
+      res.status(200).json({
+        status: false,
+        err: err,
+      });
+    } else if (newApplicant === undefined) {
+      res.status(200).json({
+        status: true,
+        updated: false,
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        updated: true,
+        newApplicant: newApplicant,
+      });
+    }
+  });
+});
+
 module.exports = router;

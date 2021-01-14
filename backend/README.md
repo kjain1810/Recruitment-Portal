@@ -80,6 +80,7 @@
       "last_name": str,
       "email": str (regex email),
       "listings": [_id of Job],   
+      "bio": str
    }
    ```
 

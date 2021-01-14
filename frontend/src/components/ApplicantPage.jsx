@@ -12,8 +12,9 @@ class ApplicantPage extends Component {
   }
   render() {
     return (
-      <div className="page">
+      <div>
         <ApplicantHeader email={this.state.email} id={this.state.id} />
+        <div className="page"></div>
       </div>
     );
   }

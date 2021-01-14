@@ -8,9 +8,9 @@ class LoginPage extends Component {
     state = {  }
     render() { 
         return (
-          <div className="LoginPage">
+          <div>
             <LoginHeader></LoginHeader>
-            <div className="rowC">
+            <div className="rowC LoginPage">
               <Login className="columnLeft"></Login>
               <SignUp className="columnRight"></SignUp>
             </div>
