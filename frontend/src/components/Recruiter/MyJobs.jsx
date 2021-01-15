@@ -17,6 +17,7 @@ class MyJobs extends Component {
     this.onChangeMinute = this.onChangeMinute.bind(this);
     this.onChangeHour = this.onChangeHour.bind(this);
     this.onChangeMaxPos = this.onChangeMaxPos.bind(this);
+    this.onChangeMaxApps = this.onChangeMaxApps.bind(this);
 
     this.state = {
       email: props.email,
@@ -31,6 +32,7 @@ class MyJobs extends Component {
       minute: null,
       hour: null,
       max_positions: null,
+      max_applications: null
     };
   }
 
@@ -79,6 +81,7 @@ class MyJobs extends Component {
       editingJob: index,
       editTitle: this.state.jobs[index]["title"],
       max_positions: this.state.jobs[index]["max_positions"],
+      max_applications: this.state.jobs[index]["max_applications"],
       day: date.getDate(),
       month: date.getMonth(),
       year: date.getFullYear(),
@@ -116,7 +119,8 @@ class MyJobs extends Component {
         _id: this.state.jobs[this.state.editingJob]._id,
         title: this.state.editTitle,
         application_deadline: new Date(this.state.year, this.state.month, this.state.day, this.state.hour, this.state.minute),
-        max_positions: parseInt(this.state.max_positions)
+        max_positions: parseInt(this.state.max_positions),
+        max_applications: parseInt(this.state.max_applications),
     };
     axios.put("http://localhost:8080/jobs/editjob", body).then((response) => {
         if(response.data.status === false) {
@@ -156,8 +160,12 @@ class MyJobs extends Component {
   onChangeMaxPos(event) {
       this.setState({ max_positions: event.target.value });
   }
+  onChangeMaxApps(event) {
+    this.setState({max_applications: event.target.value});
+  }
 
   render() {
+    console.log(this.state.jobs);
     if (this.state.viewingJob === -1 && this.state.editingJob === -1) {
       return (
         <div>
@@ -185,13 +193,13 @@ class MyJobs extends Component {
                         onClick={(event) => this.editJob(event, index)}
                       >
                         Edit
-                      </Button>
+                      </Button> {" "}
                       <Button
                         color="danger"
                         onClick={(event) => this.deleteJob(event, index)}
                       >
                         Delete
-                      </Button>
+                      </Button>{" "}
                       <Button
                         color="primary"
                         onClick={(event) => this.viewJob(event, index)}
@@ -274,8 +282,24 @@ class MyJobs extends Component {
               </div>
             </FormGroup>
             <FormGroup>
-                <Label for="maxpositions">Max Positions</Label>
-                <Input required type="number" value={this.state.max_positions} onChange={this.onChangeMaxPos} />
+              <Label for="maxpositions">Max Positions</Label>
+              <Input
+                required
+                type="number"
+                name="maxpositions"
+                value={this.state.max_positions}
+                onChange={this.onChangeMaxPos}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="maxapplicants">Max Applications</Label>
+              <Input
+                required
+                type="number"
+                name="maxapplicants"
+                value={this.state.max_applications}
+                onChange={this.onChangeMaxApps}
+              />
             </FormGroup>
             <Button color="primary">Edit!</Button>
           </Form>
