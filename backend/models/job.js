@@ -20,6 +20,16 @@ const JobSchema = new Schema({
       isAsync: false,
     },
   },
+  recruiter_name: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return v.length > 0;
+      },
+      message: "Recruiter name is required!"
+    }
+  },
   max_applications: {
     type: Number,
     required: true,

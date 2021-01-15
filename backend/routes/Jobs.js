@@ -29,6 +29,7 @@ router.post("/addjob", (req, res) => {
     title: bodyelements.title,
     recruiter: mongoose.Types.ObjectId(bodyelements._id),
     email: bodyelements.email,
+    recruiter_name: bodyelements.recruiter_name,
     max_applications: bodyelements.max_applications,
     max_positions: bodyelements.max_positions,
     application_deadline: new Date(year, month, day, hours, minutes),

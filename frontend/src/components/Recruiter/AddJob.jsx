@@ -44,7 +44,31 @@ class AddJob extends Component {
       duration: 0,
       durationOptions: [0, 1, 2, 3, 4, 5, 6],
       salary: 0,
+      name: "",
     };
+  }
+
+  componentDidMount() {
+    axios.get("http://localhost:8080/recruiter/getrecruiter", {
+      headers: {
+        id: this.state.id
+      }
+    }).then((response) => {
+      if(response.data.status === false) {
+        console.log(response.data.err);
+      } else if(response.data.found === false) {
+        console.log("wtf");
+      } else {
+        this.setState({
+          name:
+            response.data.recruiter.first_name +
+            " " +
+            (response.data.recruiter.middle_name !== undefined ? response.data.recruiter.middle_name : "") +
+            " " +
+            response.data.recruiter.last_name,
+        });
+      }
+    })
   }
 
   formSubmit(event) {
@@ -66,6 +90,7 @@ class AddJob extends Component {
         job_type: this.state.type,
         duration: this.state.duration,
         salary: this.state.salary,
+        recruiter_name: this.state.name,
       })
       .then((response) => {
         if (response.data.status === false) {
