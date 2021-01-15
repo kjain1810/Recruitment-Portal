@@ -56,7 +56,7 @@ const JobSchema = new Schema({
     },
   },
   skillset: {
-    type: [Schema.Types.ObjectId],
+    type: [String],
     default: [],
   },
   job_type: {

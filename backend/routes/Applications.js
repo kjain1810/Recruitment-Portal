@@ -39,4 +39,21 @@ router.get("/myapplications", (req, res) => {
     });
 });
 
+router.get("/getapplications", (req, res) => {
+  Application.count({ job: req.headers.id }, function (err, count) {
+    if (err) {
+      res.status(200).json({
+        status: false,
+        err: err,
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        count: count,
+      });
+    }
+  });
+});
+
+
 module.exports = router;

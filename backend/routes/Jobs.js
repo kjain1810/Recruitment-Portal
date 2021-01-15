@@ -23,14 +23,16 @@ router.post("/addjob", (req, res) => {
   year = bodyelements.application_deadline_year;
   month = bodyelements.application_deadline_month;
   day = bodyelements.application_deadline_day;
+  hours = bodyelements.application_deadline_hours;
+  minutes = bodyelements.application_deadline_minutes;
   const newJob = new Job({
     title: bodyelements.title,
     recruiter: mongoose.Types.ObjectId(bodyelements._id),
     email: bodyelements.email,
     max_applications: bodyelements.max_applications,
     max_positions: bodyelements.max_positions,
-    application_deadline: new Date(year, month, day),
-    skillset: skillsetid,
+    application_deadline: new Date(year, month, day, hours, minutes),
+    skillset: skillsetlist,
     job_type: bodyelements.job_type,
     duration: bodyelements.duration,
     salary: bodyelements.salary,
@@ -71,6 +73,22 @@ router.get("/activejobs", (req, res) => {
   });
 });
 
+router.get("/recruiterjobs", (req, res) => {
+  Job.find({ active: true, recruiter: req.headers.id}, function(err, jobs) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        jobs: jobs
+      });
+    }
+  });
+})
+
 /* 
 Use: update a job
 Request: id and all the parameters to update
@@ -81,6 +99,7 @@ Request: id and all the parameters to update
 */
 router.put("/editjob", (req, res) => {
   var id = req.body._id;
+  console.log(req.body);
   Job.findByIdAndUpdate(id, {"$set": req.body}, { new: true }, function (err, newjob) {
     if (err) {
       res.status(200).json({
@@ -95,5 +114,22 @@ router.put("/editjob", (req, res) => {
     }
   });
 });
+
+router.delete("/deletejob", (req, res) => {
+  var id = req.headers.id;
+  console.log("deleting", id);
+  Job.findByIdAndDelete(id, function(err) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else {
+      res.status(200).json({
+        status: true
+      });
+    }
+  });
+})
 
 module.exports = router;
