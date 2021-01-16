@@ -24,7 +24,7 @@ router.post("/addapplication", (req, res) => {
 });
 
 router.get("/myapplications", (req, res) => {
-  Application.find({ applicant: req.body.applicantid })
+  Application.find({ applicant: req.headers.applicantid })
     .then((applications) => {
       res.status(200).json({
         status: true,

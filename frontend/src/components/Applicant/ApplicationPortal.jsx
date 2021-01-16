@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Button, Badge, Input, Label, Row, Col, FormGroup, Form } from "reactstrap";
+import {
+  Table,
+  Button,
+  Badge,
+  Input,
+  Label,
+  Row,
+  Col,
+  FormGroup,
+  Form,
+} from "reactstrap";
 import Fuse from "fuse.js";
 
 class ApplicationPortal extends Component {
@@ -34,7 +44,8 @@ class ApplicationPortal extends Component {
       filtermaxsal: -1,
       askSOP: false,
       application: {},
-      sop: ""
+      sop: "",
+      jobsApplied: 0,
     };
   }
 
@@ -43,9 +54,44 @@ class ApplicationPortal extends Component {
       if (response.data.status === false) {
         console.log(response.data.err);
       } else {
-        this.setState({
-          jobs: response.data.jobs,
+        var jobs = response.data.jobs;
+        jobs.forEach((job) => {
+          if (job.max_applications <= 0 || job.max_positions <= 0) {
+            job.canapply = false;
+          } else {
+            job.canapply = true;
+          }
         });
+        axios
+          .get("http://localhost:8080/applications/myapplications", {
+            headers: {
+              applicantid: this.state.id,
+            },
+          })
+          .then((response) => {
+            if (response.data.status === false) {
+              console.log(response.data.err);
+            } else {
+              var lmao = {};
+              response.data.applications.forEach((application) => {
+                lmao[application.job] = true;
+              });
+              jobs.forEach((job) => {
+                if (lmao[job._id]) {
+                  job.alreadyApplied = true;
+                } else {
+                  job.alreadyApplied = false;
+                }
+              });
+              var canApply = response.data.applications.filter(
+                (app) => app.status !== "Rejected"
+              ).length;
+              this.setState({
+                jobs: jobs,
+                jobsApplied: canApply,
+              });
+            }
+          });
         this.setState({
           fuser: new Fuse(this.state.jobs, { keys: ["title"] }),
         });
@@ -89,42 +135,71 @@ class ApplicationPortal extends Component {
     event.preventDefault();
     var body = this.state.application;
     body["sop"] = this.state.sop;
-    console.log(body);
-    axios.post("http://localhost:8080/applications/addapplication", body).then((response) => {
-      if(response.data.status === false) {
-        console.log(response.data.err);
-      } else {
-        console.log(response.data.recruiter);
-        this.setState({askSOP: false});
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
+    axios
+      .post("http://localhost:8080/applications/addapplication", body)
+      .then((response) => {
+        if (response.data.status === false) {
+          console.log(response.data.err);
+        } else {
+          this.setState({ askSOP: false });
+        }
+        axios
+          .put("http://localhost:8080/jobs/decrapps", { _id: body.job })
+          .then((response) => {
+            if (response.data.status === false) {
+              console.log(response.data.err);
+            } else {
+              var jobs = [...this.state.jobs];
+              jobs.forEach((job) => {
+                console.log(response.data.job);
+                if (job._id === response.data.job._id) {
+                  job.max_applications -= 1;
+                  job.alreadyApplied = true;
+                }
+              });
+              this.setState({ jobs: jobs });
+            }
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  askSOP(event, jobID, recruiterID,) {
+  askSOP(event, jobID, recruiterID, jobTitle) {
     event.preventDefault();
-    this.setState({askSOP: true, application: {
-      job: jobID,
-      applicant: this.state.id,
-      recruiter: recruiterID,
-      sop: "",
-    }});
+    this.setState({
+      askSOP: true,
+      application: {
+        job: jobID,
+        applicant: this.state.id,
+        recruiter: recruiterID,
+        sop: "",
+        title: jobTitle
+      },
+    });
   }
 
   onChangeSOP(event) {
-    this.setState({sop: event.target.value});
+    this.setState({ sop: event.target.value });
   }
 
   render() {
-    if(this.state.askSOP) {
+    if (this.state.askSOP) {
       return (
         <Form onSubmit={(event) => this.applyJob(event)}>
           <FormGroup>
             <Label for="sop">SOP</Label>
-            <Input required name="sop" value={this.state.sop} onChange={this.onChangeSOP} />
+            <Input
+              required
+              name="sop"
+              value={this.state.sop}
+              onChange={this.onChangeSOP}
+            />
           </FormGroup>
-          <Button onClick={this.applyJob} color="primary">Submit!</Button>
+          <Button onClick={this.applyJob} color="primary">
+            Submit!
+          </Button>
         </Form>
       );
     }
@@ -351,7 +426,7 @@ class ApplicationPortal extends Component {
           <tbody>
             {jobs.map((job, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{job.title}</td>
                   <td>
                     {job.skillset.map((skill) => {
@@ -370,9 +445,18 @@ class ApplicationPortal extends Component {
                   </td>
                   <td>
                     {job.alreadyApplied ? (
-                      <Button color="seconary">Applied!</Button>
-                    ) : job.active ? (
-                      <Button color="primary" onClick={(event) => this.askSOP(event, job._id, job.recruiter)}>Apply</Button>
+                      <Button color="secondary">Applied!</Button>
+                    ) : this.state.jobsApplied >= 10 ? (
+                      <Button color="danger">Application limit reached!</Button>
+                    ) : job.canapply ? (
+                      <Button
+                        color="primary"
+                        onClick={(event) =>
+                          this.askSOP(event, job._id, job.recruiter, job.title)
+                        }
+                      >
+                        Apply
+                      </Button>
                     ) : (
                       <Button color="danger">Full :(</Button>
                     )}

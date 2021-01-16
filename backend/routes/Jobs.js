@@ -116,6 +116,24 @@ router.put("/editjob", (req, res) => {
   });
 });
 
+router.put("/decrapps", (req, res) => {
+  var id = req.body._id;
+  Job.findByIdAndUpdate(id, {"$inc": {max_applications: -1}}, {new: true}, function(err, data) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else {
+      console.log(data);
+      res.status(200).json({
+        status: true,
+        job: data
+      });
+    }
+  })
+})
+
 router.delete("/deletejob", (req, res) => {
   var id = req.headers.id;
   console.log("deleting", id);
@@ -131,6 +149,23 @@ router.delete("/deletejob", (req, res) => {
       });
     }
   });
+})
+
+router.get("/myjobs", (req, res) => {
+  var ids = req.headers.ids;
+  Job.find({'_id': { "$in": ids}}, function(err, jobs) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        jobs: jobs
+      });
+    }
+  })
 })
 
 module.exports = router;

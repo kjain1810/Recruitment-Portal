@@ -65,6 +65,7 @@
       "applicant": _id,
       "recruiter": _id,
       "sop": str,
+      "title": str,
       "status": str (either applied, shortlisted, accepted or rejected),
       "still_eligible": bool
    }

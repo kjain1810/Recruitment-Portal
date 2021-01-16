@@ -45,6 +45,10 @@ const ApplicationSchema = new Schema({
             message: "Invalid application status"
         }
     },
+    title: {
+        type: String,
+        required: true
+    },
     still_eligible: {
         type: Boolean,
         default: true
