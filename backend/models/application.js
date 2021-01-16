@@ -27,13 +27,16 @@ const ApplicationSchema = new Schema({
     status: {
         type: String,
         required: true,
+        default: "Applied",
         validate: {
             validator: function (v) {
-                if (v === "Full-time") {
+                if (v === "Accepted") {
                     return true;
-                } else if (v === "Part-time") {
+                } else if (v === "Rejected") {
                     return true;
-                } else if (v === "Work from Home") {
+                } else if (v === "Shortlist") {
+                    return true;
+                } else if(v === "Applied"){
                     return true;
                 } else {
                     return false;

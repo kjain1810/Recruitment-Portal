@@ -55,5 +55,20 @@ router.get("/getapplications", (req, res) => {
   });
 });
 
+router.get("/jobapplications", (req, res) => {
+  Application.find({job: req.headers.id}).then((applications) => {
+    console.log(req.headers.id, applications);
+    res.status(200).json({
+      status: true,
+      applications: applications
+    });
+  }).catch((err) => {
+    res.status(200).json({
+      status: false,
+      err: err
+    });
+  });
+})
+
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Table, Button, Form, FormGroup, Label, Input, Row } from "reactstrap";
+import ViewApplications from "./ViewApplications";
 
 class MyJobs extends Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class MyJobs extends Component {
     this.deleteJob = this.deleteJob.bind(this);
     this.editJob = this.editJob.bind(this);
     this.viewJob = this.viewJob.bind(this);
+    this.getBack = this.getBack.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onSubmitEdit = this.onSubmitEdit.bind(this);
     this.onChangeDay = this.onChangeDay.bind(this);
@@ -111,6 +113,11 @@ class MyJobs extends Component {
   viewJob(event, index) {
     event.preventDefault();
     console.log("Viewing ", index);
+    this.setState({viewingJob: this.state.jobs[index]["_id"]});
+  }
+  getBack(event) {
+    event.preventDefault();
+    this.setState({viewingJob: -1});
   }
 
   onSubmitEdit(event) {
@@ -165,7 +172,6 @@ class MyJobs extends Component {
   }
 
   render() {
-    console.log(this.state.jobs);
     if (this.state.viewingJob === -1 && this.state.editingJob === -1) {
       return (
         <div>
@@ -306,6 +312,9 @@ class MyJobs extends Component {
         </div>
       );
     } else {
+      return (
+        <ViewApplications key={this.state.viewingJob} id={this.state.viewingJob} goBack={this.getBack}/>
+      )
     }
   }
 }
