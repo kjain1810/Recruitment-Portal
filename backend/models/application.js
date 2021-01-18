@@ -45,6 +45,10 @@ const ApplicationSchema = new Schema({
             message: "Invalid application status"
         }
     },
+    date: {
+        type: Date,
+        default: Date.now()
+    },
     title: {
         type: String,
         required: true

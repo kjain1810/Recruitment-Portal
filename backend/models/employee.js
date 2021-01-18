@@ -38,4 +38,4 @@ const EmployeeSchema = new Schema({
     }
 });
 
-module.exports = Employee = mongoose.model("Languages", EmployeeSchema);
+module.exports = Employee = mongoose.model("Employee", EmployeeSchema);

@@ -29,7 +29,7 @@ class ApplicantHeader extends Component {
           </NavItem>
           <NavItem>
             <NavLink to={{
-                pathname: "/logout"
+                pathname: "/"
             }} tag={RRNavLink}>LogOut</NavLink>
           </NavItem>
         </Nav>

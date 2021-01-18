@@ -313,7 +313,7 @@ class MyJobs extends Component {
       );
     } else {
       return (
-        <ViewApplications key={this.state.viewingJob} id={this.state.viewingJob} goBack={this.getBack}/>
+        <ViewApplications key={this.state.viewingJob} id={this.state.viewingJob} job_info={this.state.jobs[this.state.jobs.findIndex(job => job._id===this.state.viewingJob)]} goBack={this.getBack}/>
       )
     }
   }

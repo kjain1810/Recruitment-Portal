@@ -25,10 +25,12 @@ class MyApplications extends Component {
           console.log(response.data.err);
         } else {
           var apps = response.data.applications;
+          var tosend = [];
+          apps.forEach(app => tosend.push(app.job))
           axios
             .get("http://localhost:8080/jobs/myjobs", {
               headers: {
-                ids: apps.map((app) => app.job),
+                ids: tosend,
               },
             })
             .then((response) => {
@@ -42,10 +44,13 @@ class MyApplications extends Component {
                     name: job.recruiter_name,
                   };
                 });
+                console.log(infos);
+                console.log(apps);
                 apps.forEach((app) => {
                   app["salary"] = infos[app.job].salary;
                   app["recruiter_name"] = infos[app.job].name;
                 });
+                console.log("applications", apps);
                 this.setState({ myapps: apps });
               }
             });

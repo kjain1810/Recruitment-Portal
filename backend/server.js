@@ -9,6 +9,7 @@ const jobRouter = require("./routes/Jobs");
 const recruiterRouter = require("./routes/Recruiter");
 const applicationRouter = require("./routes/Applications");
 const userRouter = require("./routes/Users");
+const emplyeeRouter = require("./routes/Employee");
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -30,6 +31,7 @@ app.use("/jobs", jobRouter);
 app.use("/recruiter", recruiterRouter);
 app.use("/applications", applicationRouter);
 app.use("/users", userRouter);
+app.use("/employees", emplyeeRouter);
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);

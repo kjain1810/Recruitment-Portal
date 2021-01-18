@@ -70,5 +70,40 @@ router.get("/jobapplications", (req, res) => {
   });
 })
 
+router.put("/changestatus", (req, res) => {
+  Application.findByIdAndUpdate(req.body.id, {$set: {status: req.body.status}}, {new: true}, function(err, app) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else if (app) {
+      res.status(200).json({
+        status: true,
+        found: true,
+        application: app
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        found: false
+      });
+    }
+  })
+})
+
+router.put("/markineligible", (req, res) => {
+  Application.updateMany({applicant: req.body.id}, {$set: {still_eligible: false}}).then(apps => {
+    res.status(200).json({
+      status: true
+    });
+  }).catch(err => {
+    res.status(200).json({
+      status: false,
+      err: err
+    });
+  });
+})
+
 
 module.exports = router;

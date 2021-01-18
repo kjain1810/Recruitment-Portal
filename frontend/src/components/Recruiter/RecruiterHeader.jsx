@@ -33,7 +33,7 @@ class RecruiterHeader extends Component {
             </NavItem>
             <NavItem>
                 <NavLink to={{
-                    pathname: "/logout"
+                    pathname: "/"
                 }} tag={RRNavLink}>
                     LogOut
                 </NavLink>

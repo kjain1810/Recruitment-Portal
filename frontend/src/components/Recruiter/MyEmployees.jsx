@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import { Table } from "reactstrap";
 
 class MyEmployees extends Component {
   render() {
     return (
       <div>
-        <p>My Employees</p>
+        <Table>
+          
+        </Table>
       </div>
     );
   }

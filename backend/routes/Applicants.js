@@ -74,4 +74,21 @@ router.put("/editapplicant", (req, res) => {
   });
 });
 
+router.get("/myapplicants", (req, res) => {
+  var ids = req.headers.ids.split(",");
+  Applicant.find({"_id": {$in: ids}}, function(err, applicants) {
+    if(err) {
+      res.status(200).json({
+        status: false,
+        err: err
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        applications: applicants
+      });
+    }
+  })
+})
+
 module.exports = router;
