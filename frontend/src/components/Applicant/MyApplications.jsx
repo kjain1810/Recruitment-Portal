@@ -46,12 +46,34 @@ class MyApplications extends Component {
                 });
                 console.log(infos);
                 console.log(apps);
+                var getinfo = null;
                 apps.forEach((app) => {
                   app["salary"] = infos[app.job].salary;
                   app["recruiter_name"] = infos[app.job].name;
+                  if(app.status === "Accepted") {
+                    getinfo = app.job;
+                  }
                 });
+                if(getinfo) {
+                  axios.get("http://localhost:8080/employees/myemployeeinfo", {
+                    headers: {
+                      employee: this.state.id,
+                      job: getinfo
+                    }
+                  }).then(response => {
+                    if(response.data.status === false) {
+                      console.log(response.data.err);
+                    } else if(response.data.found === false) {
+                      console.log("lmao wtf");
+                    } else {
+                      console.log(response.data.employee);
+                      apps.forEach(app => app.doj = (app.job === getinfo ? response.data.employee.date_of_joining : null));
+                      this.setState({myapps: apps});
+                    }
+                  });
+                } else {
                 console.log("applications", apps);
-                this.setState({ myapps: apps });
+                this.setState({ myapps: apps });}
               }
             });
         }

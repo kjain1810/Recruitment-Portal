@@ -143,6 +143,7 @@ class ViewApplications extends Component {
         employer: this.state.applications[index].recruiter,
         job_type: this.state.job_info.job_type,
         job_title: this.state.job_info.title,
+        job: this.state.applications[index].job
       })
       .then((response) => {
         if (response.data.status === false) {
@@ -196,7 +197,14 @@ class ViewApplications extends Component {
   render() {
     console.log(this.state.job_info);
     if (this.state.job_info.max_positions <= 0) {
-      return <p>All positions for this job listing have been filled!</p>;
+      return (
+        <div>
+          <p>All positions for this job listing have been filled!</p>
+          <Button color="primary" onClick={this.props.goBack}>
+            Go Back!
+          </Button>
+        </div>
+      );
     }
     return (
       <div>

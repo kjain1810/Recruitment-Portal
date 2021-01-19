@@ -96,7 +96,8 @@
       "employer": _id of Recruiter,
       "date_of_joining": date/time,
       "job_type": str (either full time, part time or wfh),
-      "job_title": str
+      "job_title": str,
+      "job": _id
    }
    ```
 

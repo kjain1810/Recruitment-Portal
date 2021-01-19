@@ -46,10 +46,24 @@ class ApplicationPortal extends Component {
       application: {},
       sop: "",
       jobsApplied: 0,
+      accepted: false
     };
   }
 
   componentDidMount() {
+    axios.get("http://localhost:8080/applicant/getapplicant", {
+      headers: {
+        id: this.state.id
+      }
+    }).then(response => {
+      if(response.data.status === false ){
+        console.log(response.data.err);
+      } else if(response.data.found === false) {
+        console.log("wtf");
+      } else {
+        this.setState({accepted: response.data.applicant.accepted});
+      }
+    })
     axios.get("http://localhost:8080/jobs/activejobs").then((response) => {
       if (response.data.status === false) {
         console.log(response.data.err);
@@ -89,12 +103,10 @@ class ApplicationPortal extends Component {
               this.setState({
                 jobs: jobs,
                 jobsApplied: canApply,
+                fuser: new Fuse(jobs, {keys: ["title"]})
               });
             }
           });
-        this.setState({
-          fuser: new Fuse(this.state.jobs, { keys: ["title"] }),
-        });
       }
     });
   }
@@ -185,6 +197,9 @@ class ApplicationPortal extends Component {
   }
 
   render() {
+    if(this.state.accepted === true) {
+      return (<p>You already have a job! Can't apply for another</p>)
+    }
     if (this.state.askSOP) {
       return (
         <Form onSubmit={(event) => this.applyJob(event)}>

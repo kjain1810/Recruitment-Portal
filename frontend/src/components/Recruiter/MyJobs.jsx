@@ -52,7 +52,7 @@ class MyJobs extends Component {
           response.data.jobs.forEach((job) => {
             axios
               .get("http://localhost:8080/applications/getapplications", {
-                header: {
+                headers: {
                   id: job._id,
                 },
               })
@@ -181,7 +181,8 @@ class MyJobs extends Component {
                 <td>Title</td>
                 <td>Date of posting</td>
                 <td>Number of applicants</td>
-                <td>Max positions</td>
+                <td>Applications left</td>
+                <td>Positions left</td>
                 <td>Options</td>
               </tr>
             </thead>
@@ -192,6 +193,7 @@ class MyJobs extends Component {
                     <td>{job.title}</td>
                     <td>{job.date_of_posting}</td>
                     <td>{job.applicants}</td>
+                    <td>{job.max_applications}</td>
                     <td>{job.max_positions}</td>
                     <td>
                       <Button
