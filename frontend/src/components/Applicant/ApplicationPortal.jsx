@@ -209,7 +209,7 @@ class ApplicationPortal extends Component {
                   job.alreadyApplied = true;
                 }
               });
-              this.setState({ jobs: jobs });
+              this.setState({ jobs: jobs, sop: "" });
             }
           });
       })
@@ -545,7 +545,7 @@ class ApplicationPortal extends Component {
                   <td>{job.duration}</td>
                   <td>{job.salary}</td>
                   <td>
-                    {job.rating_cnt > 0 ? job.rating_cnt / job.rating_sum : 0}
+                    {job.rating_cnt > 0 ? job.rating_sum / job.rating_cnt : 0}
                   </td>
                   <td>
                     {job.alreadyApplied ? (

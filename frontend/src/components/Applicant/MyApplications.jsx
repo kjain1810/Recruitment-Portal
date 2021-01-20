@@ -95,7 +95,7 @@ class MyApplications extends Component {
     axios.get("http://localhost:8080/rating/getrating", {
       headers: {
         person_giving_rating: this.state.id,
-        person_getting_rating: app.recruiter,
+        person_getting_rating: app.job,
       },
     }).then(response => {
       if(response.data.status === false) {
@@ -123,7 +123,7 @@ class MyApplications extends Component {
     event.preventDefault();
     const rating_body = {
       person_giving_rating: this.state.id,
-      person_getting_rating: this.state.rating.recruiter,
+      person_getting_rating: this.state.rating.job,
       rating: this.state.currating,
       recruiter: false,
     };
@@ -138,7 +138,7 @@ class MyApplications extends Component {
       })
       .catch((err) => console.log(err));
     var rec_body = {
-      id: this.state.rating.recruiter,
+      id: this.state.rating.job,
       inc: {
         rating_sum: this.state.currating - this.state.prevrating,
       },
@@ -146,7 +146,7 @@ class MyApplications extends Component {
     if(this.state.alreadyrated === false) {
       rec_body["inc"]["rating_cnt"] = 1;
     }
-    axios.put("http://localhost:8080/recruiter/getrating", rec_body).then(response => {
+    axios.put("http://localhost:8080/jobs/getrating", rec_body).then(response => {
       if(response.data.status === false) {
         console.log("err", response.data.err);
       } else if(response.data.found === false) {

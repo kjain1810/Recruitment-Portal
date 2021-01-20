@@ -71,25 +71,4 @@ router.put("/updaterecruiter", (req, res) => {
   });
 })
 
-router.put("/getrating", (req, res) => {
-  Recruiter.findByIdAndUpdate(req.body.id, {$inc: req.body.inc}).then(rec => {
-    if(rec) {
-      res.status(200).json({
-        status: true,
-        found: true
-      });
-    } else {
-      res.status(200).json({
-        status: true,
-        found: false
-      });
-    }
-  }).catch(err => {
-    res.status(200).json({
-      status: false,
-      err: err
-    });
-  });
-})
-
 module.exports = router;

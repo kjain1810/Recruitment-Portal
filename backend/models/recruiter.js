@@ -30,49 +30,29 @@ const RecruiterSchema = new Schema({
   bio: {
     type: String,
     validate: {
-      validator: function (v) {
+      validator: function(v) {
         return v.split(" ").length <= 250;
       },
-      message: "Max 250 words bio!",
-    },
+      message: "Max 250 words bio!"
+    }
   },
   contact_num: {
     type: String,
     validate: {
       validator: function (v) {
-        if (v.length !== 10) {
+        if(v.length !== 10) {
           return false;
         }
-        for (i = 0; i < 10; i++) {
-          if (v[i] < "0" || v[i] > "9") {
+        for(i = 0; i < 10; i++) {
+          if(v[i] < '0' || v[i] > '9') {
             return false;
           }
         }
         return true;
       },
-      message: "Invalid number",
-    },
-  },
-  rating_sum: {
-    type: Number,
-    default: 0,
-    validate: {
-      validator: function (v) {
-        return Number.isInteger(v) && v >= 0;
-      },
-      message: "Invalid rating",
-    },
-  },
-  rating_cnt: {
-    type: Number,
-    default: 0,
-    validate: {
-      validator: function (v) {
-        return Number.isInteger(v) && v >= 0;
-      },
-      message: "Invalid number of ratings",
-    },
-  },
+      message: "Invalid number"
+    }
+  }
 });
 
 module.exports = Recruiter = mongoose.model("Recruiters", RecruiterSchema);

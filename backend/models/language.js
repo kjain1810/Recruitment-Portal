@@ -9,7 +9,6 @@ const LanguageSchema = new Schema({
     key_name: {
         type: String,
         required: true,
-        unique: true,
     }
 });
 
