@@ -27,6 +27,7 @@ class RecruiterProfile extends Component {
       listings: 0,
       contact_num: 0,
       errorbio: 0,
+      rating: 0,
     };
   }
 
@@ -47,6 +48,8 @@ class RecruiterProfile extends Component {
             fn: response.data.recruiter.first_name,
             ln: response.data.recruiter.last_name,
             listings: response.data.recruiter.listings.length,
+            rating: (response.data.recruiter.rating_cnt > 0 ? response.data.recruiter.rating_sum / response.data.recruiter.rating_cnt : 0),
+            rating_cnt: response.data.recruiter.rating_cnt
           };
           if (response.data.recruiter.middle_name !== undefined) {
             newState["mn"] = response.data.recruiter.middle_name;
@@ -228,6 +231,14 @@ class RecruiterProfile extends Component {
               <tr>
                 <td>Listings</td>
                 <td>{this.state.listings}</td>
+              </tr>
+              <tr>
+                <td>Rating</td>
+                <td>{this.state.rating}</td>
+              </tr>
+              <tr>
+                <td>Number of ratings</td>
+                <td>{this.state.rating_cnt}</td>
               </tr>
             </tbody>
           </Table>

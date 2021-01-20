@@ -91,4 +91,25 @@ router.get("/myapplicants", (req, res) => {
   })
 })
 
+router.put("/getrating", (req, res) => {
+  Applicant.findByIdAndUpdate(req.body.id, {$inc: req.body.inc}).then(app => {
+    if(app) {
+      res.status(200).json({
+        status: true,
+        found: true,
+      });
+    } else {
+      res.status(200).json({
+          status: true,
+          found: false
+      });
+    }
+  }).catch(err => {
+    res.status(200).json({
+      status: false,
+      err: err
+    });
+  })
+})
+
 module.exports = router;

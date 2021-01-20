@@ -228,7 +228,7 @@ class ViewApplications extends Component {
                   <td>
                     {app.skills.map((skill, idx) => (
                       <Badge key={idx} color="secondary">
-                        {skill}
+                        {skill.name}
                       </Badge>
                     ))}
                   </td>
