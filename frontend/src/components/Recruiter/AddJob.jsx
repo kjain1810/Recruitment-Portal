@@ -152,9 +152,17 @@ class AddJob extends Component {
   }
   addSkill(event) {
     event.preventDefault();
-    var newSkills = [...this.state.skillset];
-    newSkills.push(this.state.newSkill);
-    this.setState({ skillset: newSkills, addingSkill: false, newSkill: "" });
+    axios.put("http://localhost:8080/skills/addskill", {skill: this.state.newSkill}).then(response => {
+      if(response.data.status === false) {
+        console.log("err", response.data.err);
+      } else {
+        console.log(response.data);
+        var newSkills = [...this.state.skillset];
+        if(newSkills.findIndex(sk => sk.key_name === response.data.skill.key_name) === -1)
+          newSkills.push(response.data.skill);
+        this.setState({ skillset: newSkills, addingSkill: false, newSkill: "" });    
+      }
+    })
   }
   toggleSkill(event) {
     event.preventDefault();
@@ -197,7 +205,7 @@ class AddJob extends Component {
         skills = (
           <div>
             {this.state.skillset.map((skill) => {
-              return <Badge color="secondary">{skill}</Badge>;
+              return <div style={{width: "auto"}}><Badge color="secondary">{skill.name}</Badge>{" "}</div>;
             })}
             <Button color="primary" onClick={this.toggleSkill}>
               Add Skill

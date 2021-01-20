@@ -28,6 +28,7 @@ class ApplicationPortal extends Component {
     this.askSOP = this.askSOP.bind(this);
     this.onChangeSOP = this.onChangeSOP.bind(this);
     this.applyJob = this.applyJob.bind(this);
+    this.onChangeSkillFilter = this.onChangeSkillFilter.bind(this);
 
     this.state = {
       email: props.email,
@@ -46,24 +47,36 @@ class ApplicationPortal extends Component {
       application: {},
       sop: "",
       jobsApplied: 0,
-      accepted: false
+      accepted: false,
+      allskills: [],
+      filterskill: "None",
+      filteredskills: [],
     };
   }
 
   componentDidMount() {
-    axios.get("http://localhost:8080/applicant/getapplicant", {
-      headers: {
-        id: this.state.id
-      }
-    }).then(response => {
-      if(response.data.status === false ){
+    axios.get("http://localhost:8080/skills/allskills").then((response) => {
+      if (response.data.status === false) {
         console.log(response.data.err);
-      } else if(response.data.found === false) {
-        console.log("wtf");
       } else {
-        this.setState({accepted: response.data.applicant.accepted});
+        this.setState({ allskills: response.data.skills });
       }
-    })
+    });
+    axios
+      .get("http://localhost:8080/applicant/getapplicant", {
+        headers: {
+          id: this.state.id,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === false) {
+          console.log(response.data.err);
+        } else if (response.data.found === false) {
+          console.log("wtf");
+        } else {
+          this.setState({ accepted: response.data.applicant.accepted });
+        }
+      });
     axios.get("http://localhost:8080/jobs/activejobs").then((response) => {
       if (response.data.status === false) {
         console.log(response.data.err);
@@ -103,7 +116,7 @@ class ApplicationPortal extends Component {
               this.setState({
                 jobs: jobs,
                 jobsApplied: canApply,
-                fuser: new Fuse(jobs, {keys: ["title"]})
+                fuser: new Fuse(jobs, { keys: ["title"] }),
               });
             }
           });
@@ -141,6 +154,33 @@ class ApplicationPortal extends Component {
   }
   onChangeMaxSal(event) {
     this.setState({ filtermaxsal: event.target.value });
+  }
+
+  onChangeSkillFilter(event) {
+    if(event.target.value === -1)
+    {
+      this.setState({filterskill: "None"});
+      return;
+    }
+      var allskills = [...this.state.filteredskills];
+    if (
+      allskills.findIndex(
+        (skill) => skill.key_name === this.state.allskills[event.target.value].key_name
+      ) === -1
+    )
+      allskills.push(this.state.allskills[event.target.value]);
+    this.setState({
+      filterskill: this.state.allskills[event.target.value].name,
+      filteredskills: allskills,
+    });
+  }
+  removeSkillFilter(event, skillkey) {
+    var allskills = [];
+    this.state.filteredskills.forEach(skill => {
+      if(skill.key_name !== skillkey)
+        allskills.push(skill);
+    });
+    this.setState({filteredskills: allskills});
   }
 
   applyJob(event) {
@@ -187,7 +227,7 @@ class ApplicationPortal extends Component {
         applicant: this.state.id,
         recruiter: recruiterID,
         sop: "",
-        title: jobTitle
+        title: jobTitle,
       },
     });
   }
@@ -197,8 +237,8 @@ class ApplicationPortal extends Component {
   }
 
   render() {
-    if(this.state.accepted === true) {
-      return (<p>You already have a job! Can't apply for another</p>)
+    if (this.state.accepted === true) {
+      return <p>You already have a job! Can't apply for another</p>;
     }
     if (this.state.askSOP) {
       return (
@@ -235,6 +275,17 @@ class ApplicationPortal extends Component {
     }
     if (this.state.filterminsal >= 0) {
       jobs = jobs.filter((job) => job.salary >= this.state.filterminsal);
+    }
+    if (this.state.filteredskills.length > 0) {
+      console.log(this.state.filteredskills);
+      jobs = jobs.filter((job) => {
+        var exist = false;
+        job.skillset.forEach(skill => {
+          if(this.state.filteredskills.findIndex(sk => sk.key_name === skill.key_name) !== -1)
+            exist = true;
+        });
+        return exist;
+      })
     }
     var salary_sort_col, duration_sort_col, rating_sort_col;
     var salary_sort_type, duration_sort_type, rating_sort_type;
@@ -422,6 +473,40 @@ class ApplicationPortal extends Component {
         </Input>
         <br />
         <br />
+        <Label for="filterskills">Filter Skills</Label>
+        {this.state.filteredskills.map((skill) => {
+          return (
+            <div key={skill.key_name}>
+              <Button
+                onClick={(event) =>
+                  this.removeSkillFilter(event, skill.key_name)
+                }
+                color="danger"
+              >
+                {skill.name}
+              </Button>
+            </div>
+          );
+        })}
+        <Input
+          type="select"
+          name="filterskills"
+          value={this.state.filterskill}
+          onChange={this.onChangeSkillFilter}
+        >
+          <option key="None" value={-1}>
+            None
+          </option>
+          {this.state.allskills.map((skill, index) => {
+            return (
+              <option key={skill.key_name} value={index}>
+                {skill.name}
+              </option>
+            );
+          })}
+        </Input>
+        <br />
+        <br />
         <Table>
           <thead>
             <tr>
@@ -445,7 +530,11 @@ class ApplicationPortal extends Component {
                   <td>{job.title}</td>
                   <td>
                     {job.skillset.map((skill) => {
-                      return <Button color="secondary">{skill}</Button>;
+                      return (
+                        <div>
+                          <Button color="secondary">{skill.name}</Button>
+                        </div>
+                      );
                     })}
                   </td>
                   <td>{job.recruiter_name}</td>

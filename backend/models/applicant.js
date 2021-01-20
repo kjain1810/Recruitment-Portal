@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
 
+var Language = require("./language");
+var LanguageSchema = mongoose.model('Language').schema;
+
 const ApplicantSchema = new Schema({
   first_name: {
     type: String,
@@ -85,7 +88,7 @@ const ApplicantSchema = new Schema({
     default: false,
   },
   skill_set: {
-    type: [String],
+    type: [LanguageSchema],
     default: [],
   }
 });

@@ -5,7 +5,12 @@ const LanguageSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    key_name: {
+        type: String,
+        required: true,
+        unique: true,
     }
 });
 
-module.exports = Language = mongoose.model("Languages", LanguageSchema);
+module.exports = Language = mongoose.model("Language", LanguageSchema);

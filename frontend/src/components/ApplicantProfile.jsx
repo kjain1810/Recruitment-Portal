@@ -139,31 +139,40 @@ class ApplicantProfile extends Component {
 
   addSkill(event) {
     event.preventDefault();
-    var newArray = [...this.state.skill_set];
-    newArray.push(this.state.newSkill);
-    console.log(newArray);
-    this.setState({
-      skill_set: newArray,
-      newSkill: "",
-      addingSkill: !this.state.addingSkill,
-    });
-    axios
-      .put("http://localhost:8080/applicant/editapplicant", {
-        skill_set: newArray,
-        id: this.state.id,
-      })
-      .then((response) => {
-        if (response.data.status === false) {
-          console.log(response.data.err);
-        } else if (response.data.updated === false) {
-          console.log("wtf");
-        } else {
-          console.log(response.data.newApplicant);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    axios.put("http://localhost:8080/skills/addskill", {
+      skill: this.state.newSkill,
+    }).then(response => {
+      if(response.data.status === false) {
+        console.log(response.data.err);
+      } else {
+        var newArray = [...this.state.skill_set];
+        if(newArray.findIndex(sk => sk.key_name === response.data.skill.key_name) === -1)
+          newArray.push(response.data.skill);
+        this.setState({
+          skill_set: newArray,
+          newSkill: "",
+          addingSkill: !this.state.addingSkill,
+        });
+        axios
+          .put("http://localhost:8080/applicant/editapplicant", {
+            skill_set: newArray,
+            id: this.state.id,
+          })
+          .then((response) => {
+            if (response.data.status === false) {
+              console.log(response.data.err);
+            } else if (response.data.updated === false) {
+              console.log("wtf");
+            } else {
+              console.log(response.data.newApplicant);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }).catch(err => console.log(err));
+    
   }
 
   onChangeAddSkill(event) {
@@ -262,7 +271,7 @@ class ApplicantProfile extends Component {
                   {this.state.skill_set.map((skill, index) => {
                     return (
                       <div key={index}>
-                        <Badge color="secondary">{skill}</Badge>
+                        <Badge color="secondary">{skill.name}</Badge>
                       </div>
                     );
                   })}
