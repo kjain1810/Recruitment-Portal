@@ -112,4 +112,45 @@ router.put("/getrating", (req, res) => {
   })
 })
 
+router.post("/uploadphoto", (req, res) => {
+  if(req.files === null) {
+    res.status(200).json({
+      status: false,
+      err: "No file"
+    });
+  } else {
+    const file = req.files.file;
+    file.mv(__dirname + '/../../frontend/public/uploads/photos/' + req.body.email + '.jpg', err => {
+      if(err) {
+        res.status(200).json({
+          status: false,
+          err: err
+        });
+      res.status(200).json({
+        status: true
+      })
+      }
+    })
+  }
+})
+
+router.post("/uploadcv", (req, res) => {
+  if(req.files === null) {
+    res.status({
+      status: false,
+      err: "No file"
+    });
+  } else {
+    const file = req.files.file;
+    file.mv(__dirname + "/../../frontend/public/uploads/cv/" + req.body.email + ".pdf", err => {
+      if(err) {
+        res.status(200).json({
+          status: false,
+          err: err
+        });
+      }
+    })    
+  }
+})
+
 module.exports = router;

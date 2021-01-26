@@ -105,5 +105,18 @@ router.put("/markineligible", (req, res) => {
   });
 })
 
+router.delete("/removeapplications", (req, res) => {
+  Application.deleteMany({job: req.headers.id}).then(app => {
+    res.status(200).json({
+      status: true
+    });
+  }).catch(err => {
+    res.status(200).json({
+      status: false,
+      err: err
+    });
+  });
+})
+
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Table, Badge } from "reactstrap";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class ViewApplications extends Component {
   constructor(props) {
@@ -218,6 +219,7 @@ class ViewApplications extends Component {
               <td>SOP</td>
               <td>Status</td>
               <td>Action</td>
+              <td>Resume</td>
             </tr>
           </thead>
           <tbody>
@@ -258,6 +260,9 @@ class ViewApplications extends Component {
                     >
                       Reject
                     </Button>
+                  </td>
+                  <td>
+                      <Link to={"/uploads/cv/" + app.applicant + ".pdf"} target="_blank" download>Download CV!</Link>
                   </td>
                 </tr>
               );

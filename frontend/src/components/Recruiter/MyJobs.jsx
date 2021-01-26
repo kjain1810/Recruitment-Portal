@@ -104,10 +104,20 @@ class MyJobs extends Component {
         if (response.data.status === false) {
           console.log(response.data.err);
         } else {
-          const newArray = this.state.jobs.splice(index, 1);
+          var newArray = this.state.jobs;
+          newArray = newArray.splice(index, 1);
           this.setState({ jobs: newArray });
         }
       });
+    axios.delete("http://localhost:8080/applications/removeapplications", {
+      headers: {
+        id: this.state.jobs[index]["_id"],
+      },
+    }).then(response => {
+      if(response.data.status === false) {
+        console.log(response.data.err);
+      }
+    }).catch(err => console.log(err));
   }
 
   viewJob(event, index) {

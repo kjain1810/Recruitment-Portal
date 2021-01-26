@@ -82,6 +82,11 @@ class ApplicationPortal extends Component {
         console.log(response.data.err);
       } else {
         var jobs = response.data.jobs;
+        var curDate = new Date();
+        jobs = jobs.filter(job => {
+          var dateHere = new Date(job.application_deadline);
+          return dateHere >= curDate;
+        });
         jobs.forEach((job) => {
           if (job.max_applications <= 0 || job.max_positions <= 0) {
             job.canapply = false;
@@ -529,9 +534,9 @@ class ApplicationPortal extends Component {
                 <tr key={index}>
                   <td>{job.title}</td>
                   <td>
-                    {job.skillset.map((skill) => {
+                    {job.skillset.map((skill, index) => {
                       return (
-                        <div>
+                        <div key={index}>
                           <Button color="secondary">{skill.name}</Button>
                         </div>
                       );

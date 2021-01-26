@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 
 const applicantRouter = require("./routes/Applicants");
 const jobRouter = require("./routes/Jobs");
@@ -13,6 +14,7 @@ const emplyeeRouter = require("./routes/Employee");
 const skillRouter = require("./routes/Languages");
 const ratingRouter = require("./routes/Rating");
 
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(cors());
 

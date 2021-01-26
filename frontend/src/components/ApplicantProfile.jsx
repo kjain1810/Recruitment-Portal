@@ -26,6 +26,10 @@ class ApplicantProfile extends Component {
     this.toggleAddSkill = this.toggleAddSkill.bind(this);
     this.addSkill = this.addSkill.bind(this);
     this.onChangeAddSkill = this.onChangeAddSkill.bind(this);
+    this.fileChange = this.fileChange.bind(this);
+    this.changeDP = this.changeDP.bind(this);
+    this.changeCV = this.changeCV.bind(this);
+    this.cvChange = this.cvChange.bind(this);
 
     this.state = {
       email: this.props.location.state.email,
@@ -42,6 +46,10 @@ class ApplicantProfile extends Component {
       skill_set: [],
       addingSkill: false,
       newSkill: "",
+      fileName: "Choose file",
+      uploadedFile: null,
+      cvName: "Choose file",
+      CV: null,
     };
   }
 
@@ -184,6 +192,47 @@ class ApplicantProfile extends Component {
     this.setState({ addingSkill: !this.state.addingSkill });
   }
 
+  fileChange(event) {
+    this.setState({uploadedFile: event.target.files[0], fileName: event.target.files[0].name});
+  }
+  changeDP(event) {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('file', this.state.uploadedFile);
+    formData.append('email', this.state.id);
+    console.log(formData);
+    axios.post("http://localhost:8080/applicant/uploadphoto", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    }).then(response => {
+      if(response.data.status === false) {
+        console.log(response.data.err);
+      }
+    }).catch(err => console.log(err));
+  }
+  cvChange(event) {
+    this.setState({cvName: event.target.files[0].name, CV: event.target.files[0]});
+  }
+  changeCV(event) {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('file', this.state.CV);
+    formData.append('email', this.state.id);
+    axios
+      .post("http://localhost:8080/applicant/uploadcv", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        if (response.data.status === false) {
+          console.log(response.data.err);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     var Skill;
     if (this.state.addingSkill === true) {
@@ -276,6 +325,41 @@ class ApplicantProfile extends Component {
                     );
                   })}
                   {Skill}
+                </td>
+              </tr>
+              <tr>
+                <td>Profile picture</td>
+                <td>
+                  <Input
+                    type="file"
+                    name="dpupload"
+                    onChange={this.fileChange}
+                  />
+                  <Label for="dpupload">{this.state.fileName}</Label>
+                  <br />
+                  <Button color="primary" onClick={this.changeDP}>
+                    Change profile photo!
+                  </Button>
+                  <br />
+                  <br />
+                  <img
+                    src={
+                      "uploads/photos/" + this.state.id + ".jpg"
+                    }
+                    alt="No image found"
+                    height="300px"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Resume</td>
+                <td>
+                  <Input type="file" name="cvupload" onChange={this.cvChange} />
+                  <Label for="cvupload">{this.state.cvName}</Label>
+                  <br />
+                  <Button color="primary" onClick={this.changeCV} >
+                    Change CV!
+                  </Button>
                 </td>
               </tr>
               <tr>
